@@ -1,0 +1,7 @@
+"hvh2"
+{
+	"base"		"base"
+	"title"		"hack vs hack"
+	"maps"		"^aim_"
+	"menusystem"	"0"
+}
