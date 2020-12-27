@@ -22,3 +22,8 @@ Configure **hvh2/gamemode/config.lua** to your liking, there are notes explainin
 Set these variables in your server.cfg **sv_maxupdaterate 128** and  **sv_maxcmdrate 128**
 
 **Optional:** replace the shitty weapon pack with something better, I never got around to doing it.
+
+## Content
+
+The content pack is currently just the quakesounds, the clients will automatically be subscribed to it.
+https://steamcommunity.com/sharedfiles/filedetails/?id=2312774455
