@@ -6,12 +6,9 @@ It is a fairly simple free for all non round based deathmatch gamemode
 
 ## Features
 
-- A clean & simple gradient HUD
-- A matching scoreboard
+- A clean & simple gradient HUD & scoreboard
 - Changable loadouts, player models, & settings via F1/F2/F3/F4
-- Configurable killstreaks
-- Quakesounds with optional male/female setting
-- Easily congurable hitgroup damage modifications
+- Configurable killstreaks with optional/configurable quakesounds
 
 ## Installation
 
