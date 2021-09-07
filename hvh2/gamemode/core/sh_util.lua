@@ -12,6 +12,41 @@ local entM = FindMetaTable( "Entity" )
 
 /*
 	
+	random useful functions
+	
+*/
+
+function conMsg( ... )
+	
+	MsgC( Color( 255, 0, 0 ), "hvh: redux | " )
+	
+	local args = { ... }
+	
+	local col = color_white
+	local str = "nil"
+	
+	for i = 1, #args do
+
+		if ( i % 2 == 0 ) then
+			
+			col = args[i-1]
+			str = tostring( args[i] )
+
+			if !IsColor( col ) then error( "Invalid color" ) return end
+			if !isstring( str ) then error( "Invalid string" ) return end
+			
+			MsgC( col, str )
+			
+		end
+	
+	end
+	
+	MsgN()
+
+end
+
+/*
+	
 	PData rewrite
 	
 */

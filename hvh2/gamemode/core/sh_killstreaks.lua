@@ -11,24 +11,10 @@ if SERVER then
 
 	util.AddNetworkString( "hvh_playsound" )
 	
-	function GM:DoPlayerDeath( victim, attacker, dmginfo )
-	
-		victim:CreateRagdoll()
+	hook.Add( "hvh_HandleKillstreak", "hvh_Killstreaks", function( victim, attacker, dmginfo )		
 
-		victim.LastDeath = CurTime()		
-		
-		if victim == attacker then
-		
-			victim:SetTeam( 2 )
-			
-			victim.Killstreak = 0
-			
-			return
-			
-		end	
-		
-		if IsValid( attacker ) && IsValid( victim ) then
-		
+		if HVH_CONFIG.KillstreaksEnabled && IsValid( attacker ) && IsValid( victim ) then
+
 			attacker.Killstreak = attacker.Killstreak + 1
 			
 			local killstreak = HVH_CONFIG.Killstreaks[attacker.Killstreak]
@@ -36,6 +22,8 @@ if SERVER then
 			if killstreak != nil then
 				
 				PrintMessage( HUD_PRINTCENTER, attacker:Nick() .. " " .. killstreak.str )
+				
+				conMsg( color_white, attacker:Nick() .. " ", Color( 255, 0, 0 ), killstreak.str )
 				
 				local players = player.GetAll()
 				
@@ -75,7 +63,7 @@ if SERVER then
 			
 		end
 		
-	end
+	end )
 	
 end
 

@@ -36,17 +36,17 @@ include( "core/sh_killstreaks.lua" )
 AddCSLuaFile( "core/cl_scoreboard.lua" )
 AddCSLuaFile( "core/cl_hud.lua" )
 
-
 AddCSLuaFile( "core/sh_devtools.lua" )
 include( "core/sh_devtools.lua" )
 
 AddCSLuaFile( "core/sh_menu.lua" )
 include( "core/sh_menu.lua" )
 
+include( "plugins/sv_fakehit_impactfix.lua" )
+
 resource.AddWorkshop( "2312774455" )
 
 local map = game.GetMap()
 resource.AddWorkshop( HVH_CONFIG.Maps[map] or "" )
 
-MsgC( Color( 255, 0, 0 ), "hvh: redux | " )
-MsgC( color_white, "loaded\n" )
+conMsg( color_white, "loaded " )

@@ -21,9 +21,16 @@ end
 
 local config = {}
 
+config.RoundBased = false // ROUND BASED MODE (REQUIRES SERVER RESTART) (NOT YET IMPLEMENTED, THIS HAS NO FUNCTIONALITY!)
+
+config.KillstreaksEnabled = true // Enable killstreaks?
+
 config.AutoRespawn = true // Automatically respawn the player?
 config.RespawnTime = 1 // seconds between auto respawns
+
 config.AllowTaunts = false // Allow players to use taunts?
+
+config.HideFakeHits = true // hide blood decal for invalid hits https://github.com/wrefgtzweve/blood-fix
 
 config.EnablePoints = true // Enable the point system?
 config.Points = { // How many points to give/take for each action? Set to 0 to disable
@@ -251,16 +258,17 @@ config.Teams = { // teams
 	
 	[1] = { name = "Cheater", col = Color( 145, 145, 145 ) },
 	[2] = { name = "Juden", col = Color( 234, 177, 236 ) },
-	[3] = { name = "the admen", col = Color( 245, 85, 85 ) },
+	[3] = { name = "admen", col = Color( 245, 85, 85 ) },
 	[4] = { name = "Bot", col = Color( 255, 0, 0 ) },
+	[5] = { name = "Terrorist", col = Color( 255, 75, 75 ) },
+	[6] = { name = "Counter-Terrorist", col = Color( 0, 75, 255 ) },
 	
 }
 
 config.SpecialPlayers = { // these people are special and get special teams :)
 	
 	["BOT"] = 4,
-	//["STEAM_0:0:40143824"] = 3,
-	//["STEAM_0:0:47633979"] = 3,
+	["STEAM_0:0:40143824"] = 3,
 	
 }
 

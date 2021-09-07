@@ -10,7 +10,7 @@
 function GM:CheckPassword( id64, ip, sv_pass, cl_pass, name )
 	
 	local sid = util.SteamIDFrom64( id64 )
-	
+
 	if HVH_CONFIG.WhitelistEnabled then
 		
 		if !HVH_CONFIG.Whitelist[sid] then
@@ -36,6 +36,8 @@ function GM:PlayerAuthed( ply, sid, uid )
 	end
 
 	ply.Killstreak = 0
+	
+	conMsg( color_white, ply:Nick(), Color( 255, 0, 0 ), " has joined" )
 
 end
 
@@ -47,7 +49,7 @@ function GM:PlayerDisconnected( ply )
 		
 		local players = player.GetAll()
 		
-		if table.Count( players ) == 1 then
+		if ( table.Count( players ) - 1 ) == 1 && !players[1]:IsBot() then
 		
 			for i = 1, HVH_CONFIG.BotAmount do
 			
@@ -56,7 +58,7 @@ function GM:PlayerDisconnected( ply )
 			end
 		
 		else
-		
+			
 			for k, v in next, players do
 			
 				if v:IsBot() then v:Kick() end
@@ -66,6 +68,8 @@ function GM:PlayerDisconnected( ply )
 		end
 		
 	end
+	
+	conMsg( color_white, ply:Nick(), Color( 255, 0, 0 ), " has left" )
 
 end
 
@@ -93,12 +97,16 @@ function GM:PlayerInitialSpawn( ply )
 			
 			end
 		
-		elseif !ply:IsBot() then // dont want bots kicking themselves
+		else
+			
+			if !ply:IsBot() then // dont want bots kicking themselves
 		
-			for k, v in next, players do
-			
-				if v:IsBot() then v:Kick() end
-			
+				for k, v in next, players do
+				
+					if v:IsBot() then v:Kick() end
+				
+				end
+				
 			end
 		
 		end
@@ -108,7 +116,7 @@ function GM:PlayerInitialSpawn( ply )
 	// bots dont call playerauth so this is goin here
 	if ply:IsBot() then
 	
-		ply:SetTeam( config.SpecialPlayers["BOT"] )
+		ply:SetTeam( HVH_CONFIG.SpecialPlayers["BOT"] )
 		
 	end
 	
@@ -175,9 +183,13 @@ function GM:PlayerSpawn( ply )
 	
 end
 
-function GM:PlayerDeath( victim, inflictor, attacker )
-	
-	if HVH_CONFIG.EnablePoints /*&& IsValid( victim ) && !victim:IsBot()*/ && IsValid( attacker ) && attacker:IsPlayer() then
+function GM:DoPlayerDeath( victim, attacker, dmginfo )
+
+	victim:CreateRagdoll()
+
+	victim.LastDeath = CurTime()
+
+	if HVH_CONFIG.EnablePoints && IsValid( victim ) && !victim:IsBot() && IsValid( attacker ) && attacker:IsPlayer() then
 		
 		local hitgroup = victim:LastHitGroup()
 		
@@ -194,6 +206,43 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 		victim:AddPoints( HVH_CONFIG.Points["Death"] )
  	
 	end
+	
+	if victim == attacker then
+	
+		victim:SetTeam( 2 )
+				
+		conMsg( color_white, victim:Nick() .. " committed suicide" )
+		
+	elseif IsValid( victim ) && IsValid( attacker ) && attacker:IsPlayer() then
+		
+		local wep = "Unknown"
+		local ent = attacker:GetActiveWeapon()
+		local hitgroup = victim:LastHitGroup() or 0
+		local hitgroups = { 
+			[1] = "Headshot", 
+			[2] = "Chest", 
+			[3] = "Stomach", 
+			[4] = "Left Arm",
+			[5] = "Right Arm",
+			[6] = "Left Leg",
+			[7] = "Right Leg"
+		}
+		
+		if IsValid( ent ) && ent:IsWeapon() then
+		
+			wep = ent:GetPrintName() or ent:GetClass()
+			
+		end
+		
+		conMsg( color_white, attacker:Nick(), 
+		Color( 255, 0, 0 ), " killed ", 
+		color_white, victim:Nick(), 
+		Color( 255, 0, 0 ), " (" .. wep .. ") ",
+		color_white, hitgroups[hitgroup] or "" )
+	
+	end
+	
+	hook.Run( "hvh_HandleKillstreak", victim, attacker, dmginfo )
 
 end
 
