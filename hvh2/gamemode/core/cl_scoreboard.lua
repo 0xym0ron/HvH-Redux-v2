@@ -38,7 +38,18 @@ config.Size = { // scoreboard size, scrw is screen width, scrh is screen height
 
 }
 
+config.ShowRanks = false // show user ranks on the scoreboard drop downs
+config.ShowMoney = false // show user's wallet on the scoreboard drop down
+
 config.Sounds = true // enable sounds for hovering & clicking scoreboard elements
+
+config.Ranks = { // ranks that have access to the quick use commands in the scoreboard dropdowns
+	
+	["admin"] = true,
+	["superadmin"] = true,
+	["owner"] = true,
+	
+}
 
 local colors = { // change these if you want
 
@@ -68,7 +79,7 @@ local gradient_up = Material( "vgui/gradient_up" )
 local gradient_down = Material( "vgui/gradient_down" )
 local gradient_r = Material( "vgui/gradient-r" )
 
-local function color( col, alpha ) // so we can continue to use the cached colors with different alphas. idk if this really helps performance but gmodstore forces you to do it so whatever
+local function color( col, alpha ) // so we can continue to use the cached colors with different alphas. idk if this really helps performance but gmodstore says to do it so i guess
 	
 	col = colors[col]
 	

@@ -20,7 +20,7 @@ function GM:ScalePlayerDamage( victim, hitgroup, dmginfo )
 	local attacker = dmginfo:GetAttacker()
 		
 	if IsValid( attacker ) && hitgroup == HITGROUP_HEAD then
-		
+	
 		local players = player.GetAll()
 		
 		for i = 1, #players do

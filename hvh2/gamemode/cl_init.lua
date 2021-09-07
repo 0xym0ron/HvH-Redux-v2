@@ -10,6 +10,10 @@
 include( "shared.lua" )
 include( "config.lua" )
 
+include( "core/sh_util.lua" )
+
+include( "core/sh_points.lua" )
+
 include( "core/sh_teams.lua" )
 
 include( "core/cl_killicons.lua" )

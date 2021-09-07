@@ -12,7 +12,7 @@ function GM:CheckPassword( id64, ip, sv_pass, cl_pass, name )
 	local sid = util.SteamIDFrom64( id64 )
 	
 	if HVH_CONFIG.WhitelistEnabled then
-	
+		
 		if !HVH_CONFIG.Whitelist[sid] then
 			
 			return false, HVH_CONFIG.WhitelistKickMessage
@@ -24,7 +24,7 @@ function GM:CheckPassword( id64, ip, sv_pass, cl_pass, name )
 end
 
 function GM:PlayerAuthed( ply, sid, uid )
-
+	
 	if HVH_CONFIG.SpecialPlayers[ply:SteamID()] then
 		
 		ply:SetTeam( HVH_CONFIG.SpecialPlayers[ply:SteamID()] )
@@ -39,13 +39,78 @@ function GM:PlayerAuthed( ply, sid, uid )
 
 end
 
+function GM:PlayerDisconnected( ply )
+	
+	if ply:IsBot() then return end
+	
+	if HVH_CONFIG.EnableBots then
+		
+		local players = player.GetAll()
+		
+		if table.Count( players ) == 1 then
+		
+			for i = 1, HVH_CONFIG.BotAmount do
+			
+				RunConsoleCommand( "bot" )
+			
+			end
+		
+		else
+		
+			for k, v in next, players do
+			
+				if v:IsBot() then v:Kick() end
+			
+			end
+		
+		end
+		
+	end
+
+end
+
 function GM:PlayerInitialSpawn( ply )
 	
+	// points
+	if HVH_CONFIG.EnablePoints then
+	
+		local points = ply:GetPoints()
+	
+		ply:SetNWInt( "hvh_points", points ) 
+		
+	end
+	
+	// useful for working on cheats alone on the server, got sick of manually spawning them in.
+	if HVH_CONFIG.EnableBots then
+		
+		local players = player.GetAll()
+		
+		if table.Count( players ) == 1 && !players[1]:IsBot() then
+			
+			for i = 1, HVH_CONFIG.BotAmount do
+			
+				RunConsoleCommand( "bot" )
+			
+			end
+		
+		elseif !ply:IsBot() then // dont want bots kicking themselves
+		
+			for k, v in next, players do
+			
+				if v:IsBot() then v:Kick() end
+			
+			end
+		
+		end
+		
+	end
+	
+	// bots dont call playerauth so this is goin here
 	if ply:IsBot() then
 	
-		ply:SetTeam( 1 )
-	
-	end	
+		ply:SetTeam( config.SpecialPlayers["BOT"] )
+		
+	end
 	
 end
 
@@ -69,8 +134,12 @@ function GM:PlayerSpawn( ply )
 	
 	local spawns = HVH_CONFIG.Spawns[map]
 	
-	ply:SetPos( table.Random( spawns ) )
+	if spawns != nil then
+	
+		ply:SetPos( table.Random( spawns ) )
 
+	end
+		
 	// ammo
 	local ammo_amt = 9999
 	
@@ -106,9 +175,31 @@ function GM:PlayerSpawn( ply )
 	
 end
 
+function GM:PlayerDeath( victim, inflictor, attacker )
+	
+	if HVH_CONFIG.EnablePoints /*&& IsValid( victim ) && !victim:IsBot()*/ && IsValid( attacker ) && attacker:IsPlayer() then
+		
+		local hitgroup = victim:LastHitGroup()
+		
+		if hitgroup && hitgroup == HITGROUP_HEAD then
+	
+			attacker:AddPoints( HVH_CONFIG.Points["Headshot"] )
+	
+		else
+		
+			attacker:AddPoints( HVH_CONFIG.Points["Kill"] )
+	
+		end
+
+		victim:AddPoints( HVH_CONFIG.Points["Death"] )
+ 	
+	end
+
+end
+
 function GM:PlayerDeathThink( ply )
 
-	if !ply:Alive() && ply.LastDeath != nil && ( ply.LastDeath + HVH_CONFIG.RespawnTime ) <= ( CurTime() ) then
+	if HVH_CONFIG.AutoRespawn && !ply:Alive() && ply.LastDeath != nil && ( ply.LastDeath + HVH_CONFIG.RespawnTime ) <= ( CurTime() ) then
 		
 		ply:Spawn()
 		
@@ -116,4 +207,10 @@ function GM:PlayerDeathThink( ply )
 
 	return true
 	
+end
+
+function GM:PlayerShouldTaunt( ply, act )
+	
+	return HVH_CONFIG.AllowTaunts
+
 end

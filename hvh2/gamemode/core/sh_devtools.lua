@@ -15,13 +15,13 @@ if CLIENT then
 
 	local positions = {}
 
-	concommand.Add( "pos", function( ply ) // used to get spawn location vectors for config
+	concommand.Add( "pos", function( ply )
 		
 		local pos = ply:GetPos()
 		
 		table.insert( positions, pos )
 		
-		MsgN( "\n\n\n\n\n" )
+		for i = 1, 50 do MsgN( " " ) end
 		
 		for k, v in next, positions do
 		

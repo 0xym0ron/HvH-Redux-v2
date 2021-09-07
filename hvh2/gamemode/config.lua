@@ -21,12 +21,27 @@ end
 
 local config = {}
 
+config.AutoRespawn = true // Automatically respawn the player?
 config.RespawnTime = 1 // seconds between auto respawns
+config.AllowTaunts = false // Allow players to use taunts?
+
+config.EnablePoints = true // Enable the point system?
+config.Points = { // How many points to give/take for each action? Set to 0 to disable
+
+	["Kill"] = 1,
+	["Headshot"] = 2, // you either get "Kill" or "Headshot", not both.
+	["Death"] = -1,
+	
+}
+
+config.EnableBots = true // Add bots when server is empty?
+config.BotAmount = 4 // Amount of bots to add when server is empty
 
 config.WhitelistEnabled = false // yeah, we may not want any of you dipshits playing this.
 config.WhitelistKickMessage = "Whitelist Enabled\nGo away." // lol
 config.Whitelist = {
 	
+	["BOT"] = true, // bruh
 	["STEAM_0:0:40143824"] = true, // 0xymoron
 
 }
@@ -35,6 +50,28 @@ config.AllowedModels = { // allowed player models
 	
 	// special models
 	"models/player/corpse1.mdl",
+	/*"models/player/alyx.mdl",
+	"models/player/barney.mdl",
+	"models/player/breen.mdl",
+	"models/player/eli.mdl",
+	"models/player/gman_high.mdl",
+	"models/player/kleiner.mdl",
+	"models/player/monk.mdl",
+	"models/player/mossman.mdl",
+	"models/player/mossman_arctic.mdl",
+	"models/player/odessa.mdl",
+	"models/player/magnusson.mdl",
+	"models/player/police.mdl",
+	"models/player/police_fem.mdl",
+	"models/player/combine_soldier.mdl",
+	"models/player/combine_super_soldier.mdl",
+	"models/player/combine_soldier_prisonguard.mdl",
+	"models/player/charple.mdl",
+	"models/player/skeleton.mdl",
+	"models/player/zombie_classic.mdl",
+	"models/player/zombie_fast.mdl",
+	"models/player/zombie_soldier.mdl",
+	"models/player/soldier_stripped.mdl",*/
 
 	// civillian females
 	"models/player/Group01/female_01.mdl",
@@ -43,7 +80,23 @@ config.AllowedModels = { // allowed player models
 	"models/player/Group01/female_04.mdl",
 	"models/player/Group01/female_05.mdl",
 	"models/player/Group01/female_06.mdl",
-
+	
+	// rebel females
+	/*"models/player/Group03/female_01.mdl",
+	"models/player/Group03/female_02.mdl",
+	"models/player/Group03/female_03.mdl",
+	"models/player/Group03/female_04.mdl",
+	"models/player/Group03/female_05.mdl",
+	"models/player/Group03/female_06.mdl",
+	
+	// medic females
+	"models/player/Group03m/female_01.mdl",
+	"models/player/Group03m/female_02.mdl",
+	"models/player/Group03m/female_03.mdl",
+	"models/player/Group03m/female_04.mdl",
+	"models/player/Group03m/female_05.mdl",
+	"models/player/Group03m/female_06.mdl",*/
+	
 	// civillian males
 	"models/player/Group01/male_01.mdl",
 	"models/player/Group01/male_02.mdl",
@@ -54,6 +107,34 @@ config.AllowedModels = { // allowed player models
 	"models/player/Group01/male_07.mdl",
 	"models/player/Group01/male_08.mdl",
 	"models/player/Group01/male_09.mdl",
+	
+	// alternate civillian males
+	/*"models/player/Group02/male_02.mdl",
+	"models/player/Group02/male_04.mdl",
+	"models/player/Group02/male_06.mdl",
+	"models/player/Group02/male_08.mdl",
+	
+	// rebel males
+	"models/player/Group03/male_01.mdl",
+	"models/player/Group03/male_02.mdl",
+	"models/player/Group03/male_03.mdl",
+	"models/player/Group03/male_04.mdl",
+	"models/player/Group03/male_05.mdl",
+	"models/player/Group03/male_06.mdl",
+	"models/player/Group03/male_07.mdl",
+	"models/player/Group03/male_08.mdl",
+	"models/player/Group03/male_09.mdl",
+	
+	// medic males
+	"models/player/Group03m/male_01.mdl",
+	"models/player/Group03m/male_02.mdl",
+	"models/player/Group03m/male_03.mdl",
+	"models/player/Group03m/male_04.mdl",
+	"models/player/Group03m/male_05.mdl",
+	"models/player/Group03m/male_06.mdl",
+	"models/player/Group03m/male_07.mdl",
+	"models/player/Group03m/male_08.mdl",
+	"models/player/Group03m/male_09.mdl",*/
 
 	// hostages
 	"models/player/hostage/hostage_01.mdl",
@@ -116,6 +197,11 @@ config.AllowedWeapons = { // weapons players can have in their loadout (and thei
 			name = "TMP",
 			mdl = "models/weapons/w_smg_tmp.mdl"		
 		},
+		
+		["weapon_crossbow"] = {
+			name = "HL2 Crossbow",
+			mdl = "models/weapons/w_crossbow.mdl"
+		},
 
 	},
 	
@@ -156,6 +242,8 @@ config.AmmoTypes = { // give player a bunch of these ammo types
 	"smg1",
 	"AR2",
 	"buckshot",
+	"357",
+	"XBowBolt",
 
 }
 
@@ -164,12 +252,15 @@ config.Teams = { // teams
 	[1] = { name = "Cheater", col = Color( 145, 145, 145 ) },
 	[2] = { name = "Juden", col = Color( 234, 177, 236 ) },
 	[3] = { name = "the admen", col = Color( 245, 85, 85 ) },
+	[4] = { name = "Bot", col = Color( 255, 0, 0 ) },
 	
 }
 
 config.SpecialPlayers = { // these people are special and get special teams :)
 	
-	["STEAM_0:0:40143824"] = 3,
+	["BOT"] = 4,
+	//["STEAM_0:0:40143824"] = 3,
+	//["STEAM_0:0:47633979"] = 3,
 	
 }
 
@@ -261,9 +352,12 @@ config.QuakeSounds = { // quake sound paths
 	
 }
 
-config.Maps = { // map name and their workshop id
+config.Maps = {
 
 	["hvh_ag_texture3"] = "2230836315",
+	["hvh_texture4_css_v1"] = "2427470612",
+	["hvh_combine"] = "2548973294",
+	["aim_ag_texture2_unlimited"] = "1927851445",
 
 }
 
@@ -313,6 +407,74 @@ config.Spawns = { // spawnpoints
 		Vector( 527, 1328, 1 ),
 		Vector( 423, 1788, 1 ),
 
+	},
+	
+	["hvh_texture4_css_v1"] = {
+
+		Vector( -889, 720, 13164 ),
+		Vector( -816, 194, 13164 ),
+		Vector( -193, 202, 13164 ),
+		Vector( 668, 528, 13164 ),
+		Vector( 652, 1054, 13164 ),
+		Vector( 659, 1809, 13164 ),
+		Vector( 926, 1788, 13164 ),
+		Vector( 908, 767, 13164 ),
+		Vector( 884, 174, 13293 ),
+		Vector( 645, 832, 13355 ),
+		Vector( 648, 1804, 13355 ),
+		Vector( -558, 1794, 13291 ),
+		Vector( -225, 1774, 13291 ),
+		Vector( -550, 1799, 13164 ),
+		Vector( -268, 1787, 13164 ),
+		Vector( -58, 1788, 13164 ),
+		Vector( 681, 1794, 13164 ),
+		Vector( -443, 1350, 13164 ),
+		Vector( 915, 1370, 13164 ),
+		Vector( 944, 1811, 13164 ),
+		Vector( 301, 1828, 13164 ),
+	
+	},
+	
+	["hvh_combine"] = {
+
+		Vector( 922, 250, 8 ),
+		Vector( 1956, -593, 136 ),
+		Vector( 2982, -893, 8 ),
+		Vector( 2956, -101, 8 ),
+		Vector( 1153, -584, 8 ),
+		Vector( 134, -579, 8 ),
+		Vector( -870, -941, 8 ),
+		Vector( -461, -101, 8 ),
+		Vector( -911, 897, 8 ),
+		Vector( -139, 566, 8 ),
+		Vector( 1143, -582, 200 ),
+		Vector( -274, -580, 200 ),
+	
+	},
+	
+	["aim_ag_texture2_unlimited"] = {
+
+		Vector( 914, -510, 1 ),
+		Vector( 527, -506, 1 ),
+		Vector( -378, -268, 1 ),
+		Vector( -1181, -439, 1 ),
+		Vector( -1239, 680, 1 ),
+		Vector( -747, 724, 1 ),
+		Vector( -813, 1025, 1 ),
+		Vector( -798, 1803, 1 ),
+		Vector( -502, 1799, 1 ),
+		Vector( -160, 2083, 1 ),
+		Vector( 414, 2063, 1 ),
+		Vector( 787, 1603, 1 ),
+		Vector( 889, 1257, 1 ),
+		Vector( 529, 1249, 1 ),
+		Vector( 907, 772, 1 ),
+		Vector( 924, 109, 1 ),
+		Vector( 246, 821, 192 ),
+		Vector( 248, 1809, 192 ),
+		Vector( -760, 1789, 128 ),
+		Vector( -391, 391, 1 ),
+	
 	},
 
 }
