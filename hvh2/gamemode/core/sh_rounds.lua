@@ -74,4 +74,8 @@ if SERVER then
 		
 	end
 	
+	hook.Add( "Initialize", "checkRoundState", function()
+
+	end )
+	
 end

@@ -45,6 +45,19 @@ function conMsg( ... )
 
 end
 
+
+if SERVER then
+
+	util.AddNetworkString( "hvh_chat.AddText" )
+
+	chat = {}
+	
+	function chat.AddText( ... )
+
+	end
+
+end
+
 /*
 	
 	PData rewrite

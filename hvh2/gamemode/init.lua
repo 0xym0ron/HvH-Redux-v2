@@ -9,44 +9,78 @@
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
-
-include( "shared.lua" )
-
+AddCSLuaFile( "lib.lua" )
 AddCSLuaFile( "config.lua" )
+include( "shared.lua" )
+include( "lib.lua" )
 include( "config.lua" )
 
-AddCSLuaFile( "core/sh_util.lua" )
-include( "core/sh_util.lua" )
+local folder = GM.FolderName .. "/gamemode/"
+local files, dirs = file.Find( folder .. "*", "LUA" )
 
-AddCSLuaFile( "core/sh_points.lua" )
-include( "core/sh_points.lua" )
+for k, v in SortedPairs( dirs, true ) do
+	
+	conMsg( Color( 255, 0, 0 ), v )
+	
+	local lua = file.Find( folder .. "/" .. v .. "/sh_*.lua", "LUA" )
+	for x, y in SortedPairs( lua, true ) do
+		
+		AddCSLuaFile( folder .. v .. "/" .. y )
+		include( folder .. v .. "/" .. y )
+		
+		conMsg( color_white, "└─" .. y )
+	
+	end
+	
+	local lua = file.Find( folder .. "/" .. v .. "/sv_*.lua", "LUA" )
+	for x, y in SortedPairs( lua, true ) do
+		
+		include( folder .. v .. "/" .. y )
+		
+		conMsg( color_white, "└─" .. y )
+	
+	end
+	
+	local lua = file.Find( folder .. "/" .. v .. "/cl_*.lua", "LUA" )
+	for x, y in SortedPairs( lua, true ) do
+		
+		AddCSLuaFile( folder .. v .. "/" .. y )
 
-AddCSLuaFile( "core/sh_teams.lua" )
-include( "core/sh_teams.lua" )
+		conMsg( color_white, "└─" .. y )
+	
+	end
+	
+end
 
-include( "core/sv_player.lua" )
+hook.Add( "OnGamemodeLoaded", "GAMEMODE_LOADED", function()
 
-include( "core/sv_dmg_modification.lua" )
+	resource.AddWorkshop( "2312774455" ) // content pack
+	
+	local map = game.GetMap()
+	
+	local id = HVH_CONFIG.Maps[map]
+	
+	if !id then 
+		
+		conMsg( color_white, "Unable to find ",
+		Color( 255, 0, 0 ), map,
+		color_white, " Workshop ID! Check your config.lua" )
+	
+		return 
+		
+	end
+	
+	resource.AddWorkshop( id )
+	
+	conMsg( color_white, "added ",
+	Color( 255, 0, 0 ), map .. " (" .. id .. ") ",
+	color_white, "to download queue" )	
+	
+	conMsg( color_white, "loaded " )
+	
+end )
 
-AddCSLuaFile( "core/cl_killicons.lua" )
-
-AddCSLuaFile( "core/sh_killstreaks.lua" )
-include( "core/sh_killstreaks.lua" )
-
-AddCSLuaFile( "core/cl_scoreboard.lua" )
-AddCSLuaFile( "core/cl_hud.lua" )
-
-AddCSLuaFile( "core/sh_devtools.lua" )
-include( "core/sh_devtools.lua" )
-
-AddCSLuaFile( "core/sh_menu.lua" )
-include( "core/sh_menu.lua" )
-
-include( "plugins/sv_fakehit_impactfix.lua" )
-
-resource.AddWorkshop( "2312774455" )
-
-local map = game.GetMap()
-resource.AddWorkshop( HVH_CONFIG.Maps[map] or "" )
-
-conMsg( color_white, "loaded " )
+if GAMEMODE_LOADED then
+	hook.Call( "OnGamemodeLoaded" )
+end
+GAMEMODE_LOADED = true
